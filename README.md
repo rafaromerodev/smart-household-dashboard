@@ -96,7 +96,7 @@ Adding a module means one SQL migration (a table with `household_id`, added to t
 
 ## Getting started
 
-**Requirements:** Node.js 20+ and Docker (for the local Supabase stack).
+**Requirements:** Node.js 22+ and Docker (for the local Supabase stack).
 
 ```bash
 npm install
