@@ -1,0 +1,44 @@
+{
+  "name": "smart-household-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared household dashboard: groceries, expenses, budgets, savings, workouts and chores for two people.",
+  "scripts": {
+    "//": "Scripts call node directly so they also work from Windows paths containing '&', which break npm's .cmd shims.",
+    "dev": "node node_modules/next/dist/bin/next dev",
+    "build": "node node_modules/next/dist/bin/next build",
+    "start": "node node_modules/next/dist/bin/next start",
+    "lint": "node node_modules/eslint/bin/eslint.js src",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit -p .",
+    "test": "node node_modules/vitest/vitest.mjs run",
+    "db:start": "node node_modules/supabase/dist/supabase.js start -x studio,imgproxy,vector,logflare,supavisor,edge-runtime",
+    "db:stop": "node node_modules/supabase/dist/supabase.js stop",
+    "db:reset": "node node_modules/supabase/dist/supabase.js db reset",
+    "db:migrate": "node node_modules/supabase/dist/supabase.js migration up",
+    "db:types": "node node_modules/supabase/dist/supabase.js gen types typescript --local > src/lib/supabase/database.types.ts"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
+    "lucide-react": "^1.70.0",
+    "next": "15.5.29",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.29",
+    "playwright": "^1.65.0",
+    "supabase": "^3.1.0",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^5.1.0"
+  }
+}

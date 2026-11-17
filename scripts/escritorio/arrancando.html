@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Nuestro Hogar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, sans-serif; color: #1b201d; display: grid; place-items: center;
+    background:
+      radial-gradient(40rem 32rem at 8% -5%, #cfe5d8, transparent 70%),
+      radial-gradient(36rem 30rem at 100% 15%, #f6dfcb, transparent 70%),
+      radial-gradient(44rem 34rem at 45% 110%, #dcdff5, transparent 70%), #f4f5f2;
+  }
+  .card {
+    text-align: center; padding: 2.5rem 3rem; border-radius: 2rem; background: rgb(255 255 255 / .58);
+    border: 1px solid rgb(255 255 255 / .75); backdrop-filter: blur(20px) saturate(160%);
+    box-shadow: 0 1px 0 rgb(255 255 255 / .8) inset, 0 10px 30px -12px rgb(35 55 45 / .18);
+  }
+  .logo { width: 64px; height: 64px; margin: 0 auto 1rem; border-radius: 1.2rem; background: #3d7a62; color: #fff;
+          display: grid; place-items: center; font-weight: 700; font-size: 1.25rem; }
+  h1 { font-size: 1.25rem; margin: 0 0 .25rem; font-weight: 600; }
+  p { margin: 0; color: #69716c; font-size: .9rem; }
+  .bar { margin: 1.5rem auto 0; width: 160px; height: 4px; border-radius: 4px; background: rgb(30 45 38 / .08); overflow: hidden; }
+  .bar i { display: block; width: 40%; height: 100%; border-radius: 4px; background: #3d7a62; animation: m 1.2s ease-in-out infinite; }
+  @keyframes m { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">NH</div>
+    <h1>Nuestro Hogar</h1>
+    <p id="msg">Arrancando…</p>
+    <div class="bar"><i></i></div>
+  </div>
+<script>
+  // Espera a que el servidor local responda y entra en la app.
+  const url = new URLSearchParams(location.search).get("url") || "http://localhost:3210";
+  const start = Date.now();
+  async function tick() {
+    try {
+      await fetch(url + "/offline", { mode: "no-cors", cache: "no-store" });
+      location.replace(url);
+    } catch {
+      const s = Math.round((Date.now() - start) / 1000);
+      if (s > 20) document.getElementById("msg").textContent = "Preparando la base de datos… (" + s + " s)";
+      if (s > 180) document.getElementById("msg").textContent = "Está tardando más de lo normal. ¿Está abierto Docker Desktop?";
+      setTimeout(tick, 1000);
+    }
+  }
+  tick();
+</script>
+</body>
+</html>
