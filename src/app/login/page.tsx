@@ -3,6 +3,7 @@
 import { startTransition, useActionState, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authenticate } from "./actions";
+import { demo } from "@/lib/demo";
 
 export default function LoginPage() {
   const [mode, setMode] = useState<"entrar" | "registro">("entrar");
@@ -17,6 +18,24 @@ export default function LoginPage() {
         <p className="mt-1 text-sm text-muted">Compras, gastos, ahorro, entrenamientos y tareas.</p>
       </div>
 
+      {demo && (
+        <div className="card space-y-2 text-sm">
+          <p><b>Demo pública</b> con datos ficticios. Se restablece cada día.</p>
+          <p className="text-muted">Email: {demo.email}<br />Contraseña: {demo.password}</p>
+          <button type="button" disabled={pending} className="btn-primary w-full" onClick={() => {
+            if (!demo) return;
+            const fd = new FormData();
+            fd.set("mode", "entrar");
+            fd.set("email", demo.email);
+            fd.set("password", demo.password);
+            startTransition(() => action(fd));
+          }}>
+            Entrar en la demo
+          </button>
+        </div>
+      )}
+
+      {!demo && (
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-surface-2 p-1">
         {(["entrar", "registro"] as const).map((m) => (
           <button key={m} type="button" onClick={() => setMode(m)}
@@ -25,6 +44,7 @@ export default function LoginPage() {
           </button>
         ))}
       </div>
+      )}
 
       {state.ok ? (
         <p className="card text-center text-sm">

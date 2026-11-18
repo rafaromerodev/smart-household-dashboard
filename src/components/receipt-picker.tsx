@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Camera, FileUp, Loader2, Paperclip, X } from "lucide-react";
 import { getBrowserClient } from "@/lib/supabase/client";
+import { demo } from "@/lib/demo";
 
 /**
  * Selector de justificante (foto con la cámara, galería o PDF).
@@ -17,6 +18,15 @@ export function ReceiptPicker({ householdId, highlight = false }: { householdId:
   const camRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<{ status: "idle" | "uploading" | "done" | "error"; msg?: string; id?: string; name?: string }>({ status: "idle" });
+
+  if (demo) {
+    return (
+      <div>
+        <span className="label">Justificante</span>
+        <p className="rounded-xl bg-surface-2 px-3 py-2 text-sm text-muted">La subida de justificantes está desactivada en la demo.</p>
+      </div>
+    );
+  }
 
   async function handle(file: File | undefined) {
     if (!file) return;

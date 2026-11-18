@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { type ActionResult, fail, parseForm } from "@/lib/actions";
+import { demo } from "@/lib/demo";
 
 const Credentials = z.object({
   email: z.string().trim().email("Email no válido"),
@@ -29,6 +30,7 @@ export async function authenticate(_: ActionResult, fd: FormData): Promise<Actio
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return fail(MESSAGES[error.code ?? ""] ?? error.message);
   } else {
+    if (demo) return fail(MESSAGES.signup_disabled);
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) return fail(MESSAGES[error.code ?? ""] ?? error.message);
     if (!data.session) return { ok: true, error: undefined };
