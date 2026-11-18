@@ -17,10 +17,12 @@ export async function setupHousehold(_: ActionResult, fd: FormData): Promise<Act
   if ("error" in p) return fail(p.error);
   const supabase = await createClient();
   const { modo, nombre, hogar, codigo } = p.data;
-  const { error } =
+  const { data, error } =
     modo === "crear"
       ? await supabase.rpc("create_household", { p_name: hogar || "Nuestro hogar", p_display_name: nombre })
       : await supabase.rpc("join_household", { p_code: codigo ?? "", p_display_name: nombre });
   if (error) return fail(error.message);
+  // join_household devuelve null (y cuenta el intento) cuando el código no existe.
+  if (!data) return fail("Código de invitación no válido");
   redirect("/");
 }
