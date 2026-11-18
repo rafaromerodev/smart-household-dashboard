@@ -14,18 +14,25 @@ jobs:
   reset:
     runs-on: ubuntu-latest
     if: github.repository == 'rafaromerodev/smart-household-dashboard'
+    env:
+      SUPABASE_URL: ${{ secrets.DEMO_SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.DEMO_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.DEMO_SUPABASE_SERVICE_ROLE_KEY }}
+      DEMO_EMAIL: ${{ secrets.DEMO_EMAIL }}
+      DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
     steps:
+      - name: Skip until the demo project is configured
+        if: env.SUPABASE_URL == ''
+        run: echo "Demo secrets are not set; nothing to reset."
       - uses: actions/checkout@v4
+        if: env.SUPABASE_URL != ''
       - uses: actions/setup-node@v4
+        if: env.SUPABASE_URL != ''
         with:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+        if: env.SUPABASE_URL != ''
       - name: Reset demo data
+        if: env.SUPABASE_URL != ''
         run: node scripts/demo-seed.mjs
-        env:
-          SUPABASE_URL: ${{ secrets.DEMO_SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.DEMO_SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.DEMO_SUPABASE_SERVICE_ROLE_KEY }}
-          DEMO_EMAIL: ${{ secrets.DEMO_EMAIL }}
-          DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
